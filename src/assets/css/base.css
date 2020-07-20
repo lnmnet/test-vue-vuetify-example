@@ -1,0 +1,68 @@
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0,0,0,.06);
+}
+::-webkit-scrollbar-thumb {
+  background: #e8e8e8;
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  overflow-y: auto;
+}
+
+body {
+  font-family: Arial,x-locale-body,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.breadcrumbs {
+  padding: 0;
+  height: 56px;
+}
+
+.responsive-wrap {
+  padding-left: 16px!important;
+  padding-right: 16px!important;
+  padding-bottom: 16px!important;
+  max-width: 1024px;
+}
+
+
+.v-data-table-header th {
+  font-size: 14px!important;
+  font-weight: normal;
+}
+
+.v-data-table-header th i {
+  margin-top: -4px;
+}
+.v-application {
+  /* background-color: #f5f5f5!important; */
+}
+
+.v-navigation-drawer__content {
+  overflow-y: overlay;
+}
+
+.v-navigation-drawer {
+  background-color: transparent!important;
+}
+
+.v-btn, .v-card {
+  /* border-radius: 2px!important; */
+}
+
+#admin .v-navigation-drawer__border {
+  display: none;
+}
+
+
+
+

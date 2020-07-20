@@ -1,0 +1,119 @@
+<template>
+  <v-data-table class="elevation-2" 
+    :headers="headers" 
+    :loading="isLoading" 
+    :items="courses" 
+    :search="search">
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title>{{ $store.state.navigation.navTitle }}</v-toolbar-title>
+        <v-spacer />
+
+        <v-text-field v-model="search" append-icon="search" label="Search..."></v-text-field>
+
+        <v-dialog v-model="dialog" max-width="600px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary text--secondary" v-on="on" @click="initState">添加课程</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headlin">{{ formTitle }}</span>
+            </v-card-title>
+            <v-card-text>
+              <v-form ref="form">
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="inputItem.numb" label="课程编码" />
+                    </v-col>
+                    <v-col cols="12" sm="6" md="8">
+                      <v-text-field v-model="inputItem.name" label="课程名称" />
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-card-text>
+            <v-divider class="mt-12"></v-divider>
+            <v-card-actions class="py-4 px-6">
+              <v-spacer></v-spacer>
+              <v-btn color="darken-1" text @click="dialog = false">取消</v-btn>
+              <v-btn color="primary text--secondary" @click="saveItem">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+      </v-toolbar>
+    </template>
+
+    <template v-slot:item.action="{ item }" class="test">
+      <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
+      <v-icon small @click="deleteItem(item)">delete</v-icon>
+    </template>
+  </v-data-table>
+</template>
+
+
+<script>
+import { COURSES, COURSE_INPUT, COURSE_DELETE} from "../../store/actions.type";
+import { mapGetters } from "vuex";
+export default {
+  name: 'courseList',
+
+  data: () => ({
+    dialog: false,
+    search: '',
+    editedIndex: -1,
+    inputItem: { numb: '', name: '' },
+    defaultItem: { numb: '', name: '' },
+    headers: [
+      { text: '课程编号', value:  'numb' },
+      { text: '课程名称', value:  'name' },
+      { text: '操作', value: 'action', sortable: false }
+    ]
+  }),
+
+  computed: {
+    formTitle () {
+      return this.editedIndex === -1 ? '课程添加' : '课程编辑'
+    },
+    ...mapGetters(['isLoading', 'courses'])
+  },
+
+  created () {
+    this.getItems();
+  },
+
+  methods: {
+    initState () {
+      this.editedIndex = -1;
+      this.inputItem = Object.assign({}, this.defaultItem);
+    },
+
+    close () {
+      this.dialog = false;
+      setTimeout(() => { this.initState(); }, 300);
+    },
+
+    getItems () {
+      this.$store.dispatch(COURSES);
+    },
+
+    saveItem () {
+      this.$store.dispatch(COURSE_INPUT, this.inputItem);
+      this.close();
+    },
+
+    editItem (item) {
+      this.editedIndex = this.$store.state.course.courses.indexOf(item);
+      this.inputItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem (item) {
+      confirm('确定要删除这条数据吗？') && this.$store.dispatch(COURSE_DELETE, item._id);
+    }
+  }
+  
+}
+</script>
+
